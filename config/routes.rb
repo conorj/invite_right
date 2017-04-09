@@ -1,3 +1,5 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  scope module: :v1, defaults: { format: :json } do
+    post '/v1/invitations', to: 'invitations#create', as: 'new_invitation'
+  end
 end
