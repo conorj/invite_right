@@ -24,4 +24,14 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     assert_response 201
   end
 
+  test 'status should return status info for invitation' do
+    invite = invitations(:one)
+    get invitation_status_path(invite.unique_uri)
+    assert_response 200
+
+    json_response = JSON.parse(response.body)
+    assert_equal json_response['accepted'], invite.accepted
+    assert_equal json_response['declined'], invite.declined
+    assert_equal json_response['tentative'], invite.tentative
+  end
 end

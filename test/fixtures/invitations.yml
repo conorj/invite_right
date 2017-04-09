@@ -1,9 +1,12 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-#one:
-#  event: one 
-#  unique_uri: /invitations/unique1
-#
-#two:
-#  event: two 
-#  unique_uri: /invitations/unique2
+one:
+  event: one
+  unique_uri: unique1
+  accepted: 10
+  declined: 11
+  tentative: 9
+
+two:
+  event: two
+  unique_uri: unique2
