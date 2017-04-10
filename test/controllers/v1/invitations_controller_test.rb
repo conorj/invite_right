@@ -65,4 +65,11 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     invite.reload
     assert_equal 'tentative', invite.status
   end
+
+  test 'full event refuses any new acceptances' do
+    invite = invitations(:four)
+    get invitation_accept_path(invite.unique_uri)
+    invite.reload
+    assert_equal 'refused', invite.status
+  end
 end

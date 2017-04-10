@@ -15,4 +15,8 @@ class Event < ApplicationRecord
 
     invite
   end
+
+  def full?
+    (max_places > 0) and (invitations.accepted.count >= max_places)
+  end
 end

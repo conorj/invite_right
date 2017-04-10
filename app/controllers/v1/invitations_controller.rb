@@ -46,7 +46,11 @@ module V1
     def handle_invite_response(status)
       render_json({}, 404) and return if @invite.nil?
 
+      # prevent multiple submissions
       render_json({}, 422) and return unless @invite.no_response?
+
+      # refuse accept action if quota already reached
+      status = :refused if (status == :accepted) and @invite.full?
 
       @invite.update_attribute(:status, status)
       render_json({}, 200)

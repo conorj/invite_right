@@ -7,3 +7,14 @@ one:
 two:
   event: two
   unique_uri: unique2
+  status: accepted
+
+three:
+  event: two
+  unique_uri: unique3
+  status: accepted
+
+four:
+  event: two
+  unique_uri: unique4
+  status: no_response
