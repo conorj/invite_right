@@ -3,18 +3,22 @@
 one:
   event: one
   unique_uri: unique1
+  user: one
 
 two:
   event: two
   unique_uri: unique2
   status: accepted
+  user: one
 
 three:
   event: two
   unique_uri: unique3
   status: accepted
+  user: two
 
 four:
   event: two
   unique_uri: unique4
   status: no_response
+  user: three

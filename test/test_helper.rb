@@ -7,4 +7,7 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
+  def api_headers
+    { 'X-Api-Key': users(:admin).api_auth_token }
+  end
 end

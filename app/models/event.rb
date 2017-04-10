@@ -6,10 +6,12 @@ class Event < ApplicationRecord
   validates :max_places, numericality: { only_integer: true }
 
   def self.add_invite(event_params)
+    user_id     = event_params.delete('user_id')
     inviteEvent = Event.find_or_create_by(event_params)
     return nil unless inviteEvent.valid?
 
     invite = Invitation.create(event: inviteEvent,
+                               user_id: user_id,
                                unique_uri: SecureRandom.hex[0,10].upcase)
     return nil if invite.new_record?
 

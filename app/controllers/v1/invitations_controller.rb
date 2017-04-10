@@ -3,6 +3,8 @@ module V1
     before_action :get_invite, except: :create
 
     def create
+      render_json({}, 401) and return unless admin_user?
+
       invite = Event.add_invite(event_params)
       if invite.nil?
         render json: {}, status: 422
@@ -39,6 +41,15 @@ module V1
 
     private
 
+    def admin_user?
+      token = request.headers['X-Api-Key']
+      return false unless token
+
+      return false if User.find_by(api_auth_token: token).nil?
+
+      true
+    end
+
     def get_invite
       @invite = Invitation.find_by(invitation_unique_uri)
     end
@@ -57,7 +68,7 @@ module V1
     end
 
     def event_params
-      params.permit([:place, :date, :time, :max_places])
+      params.permit([:user_id, :place, :date, :time, :max_places])
     end
 
     def invitation_unique_uri
