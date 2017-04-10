@@ -3,27 +3,21 @@ module V1
     before_action :get_invite, except: :create
 
     def create
-      render_json({}, 401) and return unless admin_user?
+      render_json({ error: I18n.t('auth_error')}, 401) and return unless admin_user?
 
       invite = Event.add_invite(event_params)
       if invite.nil?
-        render json: {}, status: 422
+        render_json({ error: I18n.t('invite_not_found')}, 422)
       else
-        render json: invite, status: 201
+        render_json(invite, 201)
       end
     end
 
     def status
-      if @invite.nil?
-        render json: {}, status: 404
-      else
-        render json: { status: @invite.status }, status: 200
-      end
+      render_status
     end
 
     def show
-      render_json({}, 404) and return if @invite.nil?
-
       render_json(@invite, 200)
     end
 
@@ -52,19 +46,22 @@ module V1
 
     def get_invite
       @invite = Invitation.find_by(invitation_unique_uri)
+      render_json({ error: I18n.t('invite_not_found')}, 404) if @invite.nil?
     end
 
     def handle_invite_response(status)
-      render_json({}, 404) and return if @invite.nil?
-
       # prevent multiple submissions
-      render_json({}, 422) and return unless @invite.no_response?
+      render_json({ error: I18n.t('invite_already_replied_to')}, 422) and return unless @invite.no_response?
 
       # refuse accept action if quota already reached
       status = :refused if (status == :accepted) and @invite.full?
 
       @invite.update_attribute(:status, status)
-      render_json({}, 200)
+      render_status
+    end
+
+    def render_status
+      render_json({ status: @invite.status }, 200)
     end
 
     def event_params

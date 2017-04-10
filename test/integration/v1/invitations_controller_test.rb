@@ -4,6 +4,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
   test 'posting incorrect API token returns 401' do
     post new_invitation_path, params: { date: '', time: '10:00' }, headers: {}
     assert_response 401
+    assert_not_nil JSON.parse(response.body)['error'] 
   end
 
   test 'posting incomplete data to create returns 422' do

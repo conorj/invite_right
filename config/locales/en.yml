@@ -20,4 +20,6 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  auth_error: 'You do not have permission to do this! Shame on you!!'
+  invite_not_found: 'No such invitation found. Please contact support'
+  invite_already_replied_to: 'You have already replied to this invite!'
