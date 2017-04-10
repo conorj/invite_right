@@ -15,7 +15,10 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'posting data creates new event only if new place/date/time' do
     assert_difference('Event.count') do
-      post new_invitation_path, params: { place: 'Limerick', date: '2017-04-15', time: '09:00:00' }
+      post new_invitation_path, params: { place: 'Limerick',
+                                          date: '2017-04-15',
+                                          time: '09:00:00',
+                                          max_places: 10 }
     end
     assert_response 201
     assert_no_difference('Event.count') do

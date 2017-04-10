@@ -53,7 +53,7 @@ module V1
     end
 
     def event_params
-      params.permit([:place, :date, :time])
+      params.permit([:place, :date, :time, :max_places])
     end
 
     def invitation_unique_uri
