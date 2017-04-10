@@ -3,15 +3,11 @@ module V1
     before_action :get_invite, except: :create
 
     def create
-      inviteEvent = Event.find_or_create_by(event_params)
-      render_json({}, 422) and return unless inviteEvent.valid?
-
-      invite = Invitation.new(event: inviteEvent,
-                              unique_uri: SecureRandom.hex[0,10].upcase)
-      if invite.save
-        render json: invite, status: 201
+      invite = Event.add_invite(event_params)
+      if invite.nil?
+        render json: {}, status: 422
       else
-        render json: { errors: invite.errors }, status: 422
+        render json: invite, status: 201
       end
     end
 
