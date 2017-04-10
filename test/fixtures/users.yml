@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+admin:
+  name: Admin User
+  email: admin@meetyl.com
+  role: 0
+  api_auth_token: WxiVM34N4SKNcEanzKwh4QGQ
+
+one:
+  name: Tom
+  email: tom@thumb.com
+  role: 1
+
+two:
+  name: Tim
+  email: tim@tam.com
+  role: 1
