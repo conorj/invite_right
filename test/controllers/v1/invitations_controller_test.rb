@@ -34,4 +34,14 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal json_response['declined'], invite.declined
     assert_equal json_response['tentative'], invite.tentative
   end
+
+  test 'show invitation info for invitee' do
+    invite = invitations(:one)
+    get invitation_show_path(invite.unique_uri)
+    assert_response 200
+
+    puts response.body
+    serializer = InvitationSerializer.new(invite)
+    assert_equal response.body, ActiveModelSerializers::Adapter.create(serializer).to_json
+  end
 end

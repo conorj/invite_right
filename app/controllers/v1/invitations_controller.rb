@@ -25,6 +25,12 @@ module V1
       end
     end
 
+    def show
+      invite = Invitation.find_by(invitation_unique_uri)
+      render_json({}, 404) and return if invite.nil?
+
+      render_json(invite, 200)
+    end
     private
 
     def event_params
