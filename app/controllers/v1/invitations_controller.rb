@@ -1,14 +1,17 @@
 module V1
   class InvitationsController < ApplicationController
-    before_action :get_invite, except: :create
+    before_action :set_invite, except: :create
 
     def create
-      render_json({ error: I18n.t('auth_error')}, 401) and return unless admin_user?
+      unless admin_user?
+        render_json({ error: I18n.t('auth_error') }, 401)
+        return
+      end
 
       params[:date_end] ||= params[:date]
       events = EventRange.add_events(event_params)
       if events.empty?
-        render_json({ error: I18n.t('error_adding_events')}, 422)
+        render_json({ error: I18n.t('error_adding_events') }, 422)
       else
         render_json(events, 201)
       end
@@ -45,20 +48,24 @@ module V1
       true
     end
 
-    def get_invite
+    def set_invite
       @invite = Invitation.find_by(invitation_unique_uri)
-      render_json({ error: I18n.t('invite_not_found')}, 404) if @invite.nil?
+      render_json({ error: I18n.t('invite_not_found') }, 404) if @invite.nil?
     end
 
     def handle_invite_response(status)
       # prevent multiple submissions
-      render_json({ error: I18n.t('invite_already_replied_to')}, 422) and return unless @invite.no_response?
+      unless @invite.no_response?
+        render_json({ error: I18n.t('invite_already_replied_to') }, 422)
+        return
+      end
 
       # refuse accept action if quota already reached
-      status = :refused if (status == :accepted) and @invite.full?
+      status = :refused if (status == :accepted) && @invite.full?
 
       # refuse accept action if already accepted for this recurring event
-      if (status == :accepted) and @invite.already_accepted_for_group?(@invite.user)
+      if (status == :accepted) &&
+         @invite.already_accepted_for_group?(@invite.user)
         status = :refused
       end
 

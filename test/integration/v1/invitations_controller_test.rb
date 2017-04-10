@@ -8,7 +8,8 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'posting incomplete data to create returns 422' do
-    post new_invitation_path, params: { date: '2017-06-01', time: '10:00' }, headers: api_headers
+    post new_invitation_path, params: { date: '2017-06-01',
+                                        time: '10:00' }, headers: api_headers
     assert_response 422
     assert_not_nil JSON.parse(response.body)['error']
   end
@@ -18,7 +19,8 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
       post new_invitation_path, params: { user_id: users(:one).id,
                                           place: 'Limerick',
                                           date: '2017-04-15',
-                                          time: '09:00:00' }, headers: api_headers
+                                          time: '09:00:00' },
+                                headers: api_headers
     end
     assert_response 201
   end
@@ -57,7 +59,8 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
 
     serializer = InvitationSerializer.new(invite)
-    assert_equal response.body, ActiveModelSerializers::Adapter.create(serializer).to_json
+    assert_equal response.body,
+                 ActiveModelSerializers::Adapter.create(serializer).to_json
   end
 
   test 'accept invite' do
@@ -102,7 +105,8 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
                                           date: '2017-04-15',
                                           time: '09:00:00',
                                           repeats: 'weekly',
-                                          date_end: '2017-05-06' }, headers: api_headers
+                                          date_end: '2017-05-06' },
+                                headers: api_headers
     end
     assert_response 201
   end
