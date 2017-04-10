@@ -1,4 +1,4 @@
 class EventSerializer < ActiveModel::Serializer
-  attributes :place, :date, :time
+  attributes :place, :date
   has_many :invitations
 end

@@ -5,11 +5,12 @@ module V1
     def create
       render_json({ error: I18n.t('auth_error')}, 401) and return unless admin_user?
 
-      invite = Event.add_invite(event_params)
-      if invite.nil?
-        render_json({ error: I18n.t('invite_not_found')}, 422)
+      params[:date_end] ||= params[:date]
+      events = EventRange.add_events(event_params)
+      if events.empty?
+        render_json({ error: I18n.t('error_adding_events')}, 422)
       else
-        render_json(invite, 201)
+        render_json(events, 201)
       end
     end
 
@@ -65,7 +66,7 @@ module V1
     end
 
     def event_params
-      params.permit([:user_id, :place, :max_places])
+      params.permit([:user_id, :place, :max_places, :date_start, :date_end])
             .merge(date: "#{params[:date]} #{params[:time]}")
     end
 

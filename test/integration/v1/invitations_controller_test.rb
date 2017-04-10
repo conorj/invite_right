@@ -4,12 +4,13 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
   test 'posting incorrect API token returns 401' do
     post new_invitation_path, params: { date: '', time: '10:00' }, headers: {}
     assert_response 401
-    assert_not_nil JSON.parse(response.body)['error'] 
+    assert_not_nil JSON.parse(response.body)['error']
   end
 
   test 'posting incomplete data to create returns 422' do
     post new_invitation_path, params: { date: '2017-06-01', time: '10:00' }, headers: api_headers
     assert_response 422
+    assert_not_nil JSON.parse(response.body)['error']
   end
 
   test 'posting complete data to creates new invitation' do
@@ -35,7 +36,8 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
       post new_invitation_path, params: { user_id: users(:one).id,
                                           place: 'Limerick',
                                           date: '2017-04-15',
-                                          time: '09:00:00' }, headers: api_headers
+                                          time: '09:00:00',
+                                          max_places: 10 }, headers: api_headers
     end
     assert_response 201
   end
@@ -84,5 +86,17 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     get invitation_accept_path(invite.unique_uri)
     invite.reload
     assert_equal 'refused', invite.status
+  end
+
+  test 'handle recurring events' do
+    assert_difference('Invitation.count', 4) do
+      post new_invitation_path, params: { user_id: users(:one).id,
+                                          place: 'Limerick',
+                                          date: '2017-04-15',
+                                          time: '09:00:00',
+                                          repeats: 'weekly',
+                                          date_end: '2017-05-06' }, headers: api_headers
+    end
+    assert_response 201
   end
 end
