@@ -1,3 +1,3 @@
 class InvitationSerializer < ActiveModel::Serializer
-  attributes :unique_uri, :place, :date, :time
+  attributes :unique_uri, :place, :date
 end

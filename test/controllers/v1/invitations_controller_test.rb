@@ -7,7 +7,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'posting incomplete data to create returns 422' do
-    post new_invitation_path, params: { date: '', time: '10:00' }, headers: api_headers
+    post new_invitation_path, params: { date: '2017-06-01', time: '10:00' }, headers: api_headers
     assert_response 422
   end
 

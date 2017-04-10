@@ -68,7 +68,8 @@ module V1
     end
 
     def event_params
-      params.permit([:user_id, :place, :date, :time, :max_places])
+      params.permit([:user_id, :place, :max_places])
+            .merge(date: "#{params[:date]} #{params[:time]}")
     end
 
     def invitation_unique_uri

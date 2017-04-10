@@ -2,11 +2,9 @@
 
 one:
   place: Dublin
-  date: 2017-04-09
-  time: '10:38:23'
+  date: 2017-04-09 10:30
 
 two:
   place: San Francisco
-  date: 2017-04-10
-  time: '12:38:23'
+  date: 2017-04-10 12:45
   max_places: 2
