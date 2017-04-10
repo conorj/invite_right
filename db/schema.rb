@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170410012350) do
+ActiveRecord::Schema.define(version: 20170410072002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,9 +29,7 @@ ActiveRecord::Schema.define(version: 20170410012350) do
     t.string   "unique_uri"
     t.datetime "created_at",             null: false
     t.datetime "updated_at",             null: false
-    t.integer  "accepted",   default: 0
-    t.integer  "declined",   default: 0
-    t.integer  "tentative",  default: 0
+    t.integer  "status",     default: 0
     t.index ["event_id"], name: "index_invitations_on_event_id", using: :btree
   end
 

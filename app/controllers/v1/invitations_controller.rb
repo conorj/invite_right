@@ -15,9 +15,7 @@ module V1
       if @invite.nil?
         render json: {}, status: 404
       else
-        render json: { accepted: @invite.accepted,
-                       declined: @invite.declined,
-                       tentative: @invite.tentative}, status: 200
+        render json: { status: @invite.status }, status: 200
       end
     end
 
@@ -48,7 +46,9 @@ module V1
     def handle_invite_response(status)
       render_json({}, 404) and return if @invite.nil?
 
-      @invite.increment!(status)
+      render_json({}, 422) and return unless @invite.no_response?
+
+      @invite.update_attribute(:status, status)
       render_json({}, 200)
     end
 

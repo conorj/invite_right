@@ -33,9 +33,7 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     assert_response 200
 
     json_response = JSON.parse(response.body)
-    assert_equal json_response['accepted'], invite.accepted
-    assert_equal json_response['declined'], invite.declined
-    assert_equal json_response['tentative'], invite.tentative
+    assert_equal json_response['status'], invite.status
   end
 
   test 'show invitation info for invitee' do
@@ -49,25 +47,22 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'accept invite' do
     invite = invitations(:one)
-    accepted_count = invite.accepted
     get invitation_accept_path(invite.unique_uri)
     invite.reload
-    assert_equal accepted_count + 1, invite.accepted
+    assert_equal 'accepted', invite.status
   end
 
   test 'decline invite' do
     invite = invitations(:one)
-    declined_count = invite.declined
     get invitation_decline_path(invite.unique_uri)
     invite.reload
-    assert_equal declined_count + 1, invite.declined
+    assert_equal 'declined', invite.status
   end
 
   test 'tentative invite' do
     invite = invitations(:one)
-    tentative_count = invite.tentative
     get invitation_tentative_path(invite.unique_uri)
     invite.reload
-    assert_equal tentative_count + 1, invite.tentative
+    assert_equal 'tentative', invite.status
   end
 end

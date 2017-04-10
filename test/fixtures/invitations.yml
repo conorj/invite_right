@@ -3,9 +3,6 @@
 one:
   event: one
   unique_uri: unique1
-  accepted: 10
-  declined: 11
-  tentative: 9
 
 two:
   event: two
