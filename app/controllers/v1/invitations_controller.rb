@@ -1,5 +1,6 @@
 module V1
   class InvitationsController < ApplicationController
+    before_action :get_invite, except: :create
 
     def create
       inviteEvent = Event.find_or_create_by(event_params)
@@ -15,23 +16,45 @@ module V1
     end
 
     def status
-      invite = Invitation.find_by(invitation_unique_uri)
-      if invite.nil?
+      if @invite.nil?
         render json: {}, status: 404
       else
-        render json: { accepted: invite.accepted,
-                       declined: invite.declined,
-                       tentative: invite.tentative}, status: 200
+        render json: { accepted: @invite.accepted,
+                       declined: @invite.declined,
+                       tentative: @invite.tentative}, status: 200
       end
     end
 
     def show
-      invite = Invitation.find_by(invitation_unique_uri)
-      render_json({}, 404) and return if invite.nil?
+      render_json({}, 404) and return if @invite.nil?
 
-      render_json(invite, 200)
+      render_json(@invite, 200)
     end
+
+    def accept
+      handle_invite_response(:accepted)
+    end
+
+    def decline
+      handle_invite_response(:declined)
+    end
+
+    def tentative
+      handle_invite_response(:tentative)
+    end
+
     private
+
+    def get_invite
+      @invite = Invitation.find_by(invitation_unique_uri)
+    end
+
+    def handle_invite_response(status)
+      render_json({}, 404) and return if @invite.nil?
+
+      @invite.increment!(status)
+      render_json({}, 200)
+    end
 
     def event_params
       params.permit([:place, :date, :time])

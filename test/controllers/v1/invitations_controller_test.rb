@@ -40,8 +40,31 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     get invitation_show_path(invite.unique_uri)
     assert_response 200
 
-    puts response.body
     serializer = InvitationSerializer.new(invite)
     assert_equal response.body, ActiveModelSerializers::Adapter.create(serializer).to_json
+  end
+
+  test 'accept invite' do
+    invite = invitations(:one)
+    accepted_count = invite.accepted
+    get invitation_accept_path(invite.unique_uri)
+    invite.reload
+    assert_equal accepted_count + 1, invite.accepted
+  end
+
+  test 'decline invite' do
+    invite = invitations(:one)
+    declined_count = invite.declined
+    get invitation_decline_path(invite.unique_uri)
+    invite.reload
+    assert_equal declined_count + 1, invite.declined
+  end
+
+  test 'tentative invite' do
+    invite = invitations(:one)
+    tentative_count = invite.tentative
+    get invitation_tentative_path(invite.unique_uri)
+    invite.reload
+    assert_equal tentative_count + 1, invite.tentative
   end
 end
