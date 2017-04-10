@@ -1,8 +1,9 @@
 class EventRange
   def self.add_events(params)
-    event_time = Time.parse(params[:date].split(' ')[1])
-    date_start = Date.parse(params[:date])
-    date_end   = Date.parse(params[:date_end])
+    event_group = SecureRandom.hex[0,10].upcase
+    event_time  = Time.parse(params[:date].split(' ')[1])
+    date_start  = Date.parse(params[:date])
+    date_end    = Date.parse(params[:date_end])
     if date_start == date_end
       dates = [date_start]
     elsif params[:repeats] == 'daily'
@@ -24,6 +25,7 @@ class EventRange
       events << Event.add_invite({date: dtime,
                         place: params[:place],
                         user_id: params[:user_id],
+                        event_group: event_group,
                         max_places: params[:max_places].to_i
       })
     end

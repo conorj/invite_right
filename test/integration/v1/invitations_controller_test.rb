@@ -88,6 +88,13 @@ class InvitationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'refused', invite.status
   end
 
+  test 'already accepted event refuses any new acceptances' do
+    invite = invitations(:fiveB)
+    get invitation_accept_path(invite.unique_uri)
+    invite.reload
+    assert_equal 'refused', invite.status
+  end
+
   test 'handle recurring events' do
     assert_difference('Invitation.count', 4) do
       post new_invitation_path, params: { user_id: users(:one).id,

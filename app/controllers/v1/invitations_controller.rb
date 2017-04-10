@@ -57,6 +57,11 @@ module V1
       # refuse accept action if quota already reached
       status = :refused if (status == :accepted) and @invite.full?
 
+      # refuse accept action if already accepted for this recurring event
+      if (status == :accepted) and @invite.already_accepted_for_group?(@invite.user)
+        status = :refused
+      end
+
       @invite.update_attribute(:status, status)
       render_status
     end
